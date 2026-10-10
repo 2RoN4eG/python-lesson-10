@@ -1,9 +1,13 @@
-print("new text")
-
 
 def read_lines(filename):
     with open(filename, 'r', encoding='utf-8') as f:
         return [line.rstrip('\n') for line in f]
+
+
+def write_lines(filename, lines):
+    with open(filename, 'w', encoding='utf-8') as f:
+        for line in lines:
+            f.write(line + "\n")
 
 
 def main():
@@ -28,16 +32,16 @@ def main():
             if o + 1 < len(old_lines) and old_lines[o + 1] == new_lines[n]:
                 # print(f"- old line is '{old_lines[o]}', new line is '{new_lines[n]}'")
                 # print(f"- old line is '{old_lines[o + 1]}', new line is '{new_lines[n]}'")
-                difference.append("- " + lhs)
+                difference.append("-" + lhs)
                 o += 1
             elif n + 1 < len(new_lines) and old_lines[o] == new_lines[n + 1]:
                 # print(f"+ old line is '{old_lines[o]}', new line is '{new_lines[n]}'")
                 # print(f"+ old line is '{old_lines[o]}', new line is '{new_lines[n + 1]}'")
-                difference.append("+ " + rhs)
+                difference.append("+" + rhs)
                 n += 1
             else:
-                difference.append("- " + lhs)
-                difference.append("+ " + rhs)
+                difference.append("-" + lhs)
+                difference.append("+" + rhs)
 
                 o += 1
                 n += 1
@@ -51,17 +55,19 @@ def main():
 
     while o < len(old_lines):
         lhs = old_lines[o]
-        difference.append("- " + lhs)
+        difference.append("-" + lhs)
         o += 1
 
     while n < len(new_lines):
         rhs = new_lines[n]
-        difference.append("+ " + rhs)
+        difference.append("+" + rhs)
         n += 1
 
-    print()
-    for index, line in enumerate(difference):
-        print(f"{index}: {line}")
+    # print()
+    # for index, line in enumerate(difference):
+    #     print(f"{index}: {line}")
+
+    write_lines("./Task 1/diff.txt", difference)
 
 
 if __name__ == "__main__":
