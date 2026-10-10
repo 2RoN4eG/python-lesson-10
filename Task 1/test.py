@@ -42,7 +42,6 @@ def main():
             else:
                 difference.append("-" + lhs)
                 difference.append("+" + rhs)
-
                 o += 1
                 n += 1
         else:
