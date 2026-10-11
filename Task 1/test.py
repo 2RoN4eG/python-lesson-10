@@ -21,46 +21,46 @@ def main():
     #     print(f"n: {index}: {line}")
     # print()
 
-    o = 0
-    n = 0
+    old = 0
+    new = 0
     difference = []
-    while o < len(old_lines) and n < len(new_lines):
-        lhs = old_lines[o]
-        rhs = new_lines[n]
+    while old < len(old_lines) and new < len(new_lines):
+        lhs = old_lines[old]
+        rhs = new_lines[new]
 
         if lhs != rhs:
-            if o + 1 < len(old_lines) and old_lines[o + 1] == new_lines[n]:
+            if old + 1 < len(old_lines) and old_lines[old + 1] == new_lines[new]:
                 # print(f"- old line is '{old_lines[o]}', new line is '{new_lines[n]}'")
                 # print(f"- old line is '{old_lines[o + 1]}', new line is '{new_lines[n]}'")
                 difference.append("-" + lhs)
-                o += 1
-            elif n + 1 < len(new_lines) and old_lines[o] == new_lines[n + 1]:
+                old += 1
+            elif new + 1 < len(new_lines) and old_lines[old] == new_lines[new + 1]:
                 # print(f"+ old line is '{old_lines[o]}', new line is '{new_lines[n]}'")
                 # print(f"+ old line is '{old_lines[o]}', new line is '{new_lines[n + 1]}'")
                 difference.append("+" + rhs)
-                n += 1
+                new += 1
             else:
                 difference.append("-" + lhs)
                 difference.append("+" + rhs)
-                o += 1
-                n += 1
+                old += 1
+                new += 1
         else:
             difference.append(rhs)
-            o += 1
-            n += 1
+            old += 1
+            new += 1
 
     # print(f"o is {o}, old file length is {len(old_lines)}")
     # print(f"n is {n}, new file length is {len(new_lines)}")
 
-    while o < len(old_lines):
-        lhs = old_lines[o]
+    while old < len(old_lines):
+        lhs = old_lines[old]
         difference.append("-" + lhs)
-        o += 1
+        old += 1
 
-    while n < len(new_lines):
-        rhs = new_lines[n]
+    while new < len(new_lines):
+        rhs = new_lines[new]
         difference.append("+" + rhs)
-        n += 1
+        new += 1
 
     # print()
     # for index, line in enumerate(difference):
