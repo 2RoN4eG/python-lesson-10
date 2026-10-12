@@ -4,6 +4,13 @@ import csv
 import json
 
 
+def write_csv_file(filename, fieldnames, lines):
+    with open(filename, "w", newline="") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(lines)
+
+
 def read_json_file(filename):
     with open(filename, "r") as json_file:
         return json.load(json_file)
@@ -33,11 +40,9 @@ def export_expiring_products(json_data, filename, days):
 
             expired_products.append(expired_product)
 
-    with open(filename, "w", newline="") as csv_file:
-        fieldnames = ["id", "name", "category", "expires", "days_left"]
-        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(expired_products)
+    write_csv_file(filename,
+                   ["id", "name", "category", "expires", "days_left"],
+                   expired_products)
 
 
 # ### 2. `export_expired_products(json_data, filename)`
@@ -61,11 +66,9 @@ def export_expired_products(json_data, filename):
                 "expired_days_ago": expired_days_ago
             })
 
-    with open(filename, "w", newline="") as csv_file:
-        fieldnames = ["id", "name", "category", "expires", "expired_days_ago"]
-        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(expired_products)
+    write_csv_file(filename,
+                   ["id", "name", "category", "expires", "expired_days_ago"],
+                   expired_products)
 
 
 # ### 3\*. `export_sales_report(json_data, filename)`
@@ -108,11 +111,9 @@ def read_merged_json_data(products_filename, sales_filename):
 
 
 def export_sales_report(json_data, filename):
-    with open(filename, "w", newline="") as csv_file:
-        fieldnames = ["product_name", "quantity_sold", "total_revenue"]
-        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(json_data)
+    write_csv_file(filename,
+                   ["product_name", "quantity_sold", "total_revenue"],
+                   json_data)
 
 
 # ### 4\*. `export_category_summary(json_data, filename)`
@@ -131,17 +132,17 @@ def export_category_summary(json_data, filename):
 
     grouped_items = []
     for group, group_items in groupby(products, key=category_predicate):
-        average_price = sum(item["price"] for item in group_items)
-        average_price /= len(list(group_items))
+        group_items = list(group_items)
+        length = len(group_items)
+        average_price = sum(float(item["price"]) for item in group_items)
+        average_price /= length
 
         grouped_items.append({
             "category": group,
-            "products_count": len(list(group_items)),
+            "products_count": length,
             "average_price": average_price
         })
 
-    with open(filename, "w", newline="") as csv_file:
-        fieldnames = ["category", "products_count", "average_price"]
-        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(grouped_items)
+    write_csv_file(filename,
+                   ["category", "products_count", "average_price"],
+                   grouped_items)
